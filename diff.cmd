@@ -1,6 +1,7 @@
 @echo off
 
 set PATH=^
+%~dp0;^
 %USERPROFILE%\Downloads\PortableGit\bin;
 
 @REM git gui

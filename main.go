@@ -2,19 +2,36 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/dirkarnez/gitdiff"
+	"io/fs"
+	"io/ioutil"
+	"os"
 )
 
 func main() {
-	left, err := gitdiff.GetLeft()
+	leftFiles, err := GetLeftDirRecursive()
 	if err != nil {
 		panic(err)
 	}
-	right, err := gitdiff.GetRight()
+	rightFiles, err := GetRightDirRecursive()
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(left, right)
+	fmt.Println("left")
+	for _, file := range leftFiles {
+		fmt.Println(file.Name(), file.IsDir())
+	}
+
+	fmt.Println("right")
+	for _, file := range rightFiles {
+		fmt.Println(file.Name(), file.IsDir())
+	}
+}
+
+func GetLeftDirRecursive() ([]fs.FileInfo, error) {
+	return ioutil.ReadDir(os.Args[1])
+}
+
+func GetRightDirRecursive() ([]fs.FileInfo, error) {
+	return ioutil.ReadDir(os.Args[2])
 }
